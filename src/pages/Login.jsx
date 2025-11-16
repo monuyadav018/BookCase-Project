@@ -1,14 +1,13 @@
 import React,{useState,useEffect} from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import {  useNavigate } from "react-router-dom"; 
+import {  useNavigate } from "react-router-dom";
 
 import { useFirebase } from "../context/Firebase";
-// import { useState } from 'react';
 
 
 
-const RegisterPage =() =>{
+const LoginPage =() =>{
     const firebase = useFirebase();
     const [email,setEmail] =useState("");
     const [password,setPassword] = useState("");
@@ -17,15 +16,16 @@ const RegisterPage =() =>{
   
     const handleSubmit =async (e)=>{
         e.preventDefault();
-        console.log("signing up user");
-        const result = await firebase.signUserwithEmailandPassword(email,password);
+        console.log("logging  up user");
+        const result = await firebase.signInuserwithEmailandPassword(email,password);
         console.log("successfull",result);
     }
-     useEffect(()=>{
-            if(firebase.isLoggedIn){
-                navigate('/');
-            }
-        },[firebase,navigate]);
+
+    useEffect(()=>{
+        if(firebase.isLoggedIn){
+            navigate('/');
+        }
+    },[firebase,navigate]);
 
   return (
    <div className="container mt-5">
@@ -33,9 +33,7 @@ const RegisterPage =() =>{
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
         <Form.Control onChange={(e)=>setEmail(e.target.value)} value={email} type="email" placeholder="Enter email" />
-        <Form.Text className="text-muted">
-          We'll never share your email with anyone else.
-        </Form.Text>
+        
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -43,12 +41,13 @@ const RegisterPage =() =>{
         <Form.Control  onChange={(e)=>setPassword(e.target.value)} value={password} type="password" placeholder="Password" />
       </Form.Group>
       
-      <Button  variant="primary" type="submit">
-        Create Account 
+      <Button variant="primary" type="submit">
+        Login Here 
       </Button>
     </Form>
+    <Button onClick={firebase.signInwithGoogle} className="mt-5 mb-5" variant="danger">Google SignIn</Button>
    </div>
   );
 }
 
-export default RegisterPage;
+export default LoginPage;
